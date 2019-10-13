@@ -1,0 +1,11 @@
+# exclude everything
+
+docker-elk/esdata1/*
+elastalert/rules/*
+
+###########################################
+# exception to the rule
+
+!docker-elk/esdata1/.gitkeep 
+!elastalert/rules/.gitkeep 
+
