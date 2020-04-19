@@ -1,0 +1,25 @@
+version: '3.2'
+
+services:
+  elasticsearch:
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./esdata1:/usr/share/elasticsearch/data:rw
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx9g -Xms9g"
+      ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD} 
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
+volumes:
+  elasticsearch:

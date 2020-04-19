@@ -3,10 +3,9 @@
 ## https://github.com/elastic/elasticsearch/blob/master/distribution/docker/src/docker/config/elasticsearch.yml
 #
 cluster.name: "docker-cluster"
+node.name: elasticsearch1
 network.host: 0.0.0.0
-node.name: elasticsearch2
 cluster.initial_master_nodes: elasticsearch1
-discovery.zen.ping.unicast.hosts: 10.20.4.98
 http.cors.enabled: true
 http.cors.allow-origin: *
 
