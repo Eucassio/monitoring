@@ -14,7 +14,9 @@ services:
       - "9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx9g -Xms9g"
-      ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD} 
+      ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+      ELASTICSEARCH1_IP: ${ELASTICSEARCH1_IP}
+      ELASTICSEARCH2_IP: ${ELASTICSEARCH2_IP}
     networks:
       - elk
 
