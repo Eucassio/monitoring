@@ -3,6 +3,7 @@
 docker-elk/esdata1/*
 elastalert/rules/*
 docker-elk/.env_prod
+docker-elk/.env
 
 ###########################################
 # exception to the rule
