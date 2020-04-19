@@ -4,12 +4,12 @@
 #
 server.name: kibana
 server.host: "0"
-elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+elasticsearch.hosts: [ "http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}" ]
 xpack.monitoring.ui.container.elasticsearch.enabled: true
 
 ## X-Pack security credentials
 #
-elasticsearch.username: elastic
-elasticsearch.password: changeme
-elastalert-kibana-plugin.serverHost: elast-alert
-elastalert-kibana-plugin.serverPort: 3030
+elasticsearch.username: ${ELASTICSEARCH_USERNAME}
+elasticsearch.password: ${ELASTICSEARCH_PASSWORD}
+#elastalert-kibana-plugin.serverHost: elast-alert
+#elastalert-kibana-plugin.serverPort: 3030

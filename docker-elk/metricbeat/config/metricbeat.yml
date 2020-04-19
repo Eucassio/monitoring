@@ -1,0 +1,9 @@
+output.elasticsearch:
+  hosts: ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+setup.dashboards:
+  enabled: true
+setup.kibana:
+  host: "${KIBANA_HOST}:${KIBANA_PORT}"
+  username: ${ELASTICSEARCH_USERNAME}
+  password: ${ELASTICSEARCH_PASSWORD}
+

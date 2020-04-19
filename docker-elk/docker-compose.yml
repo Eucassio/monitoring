@@ -13,8 +13,8 @@ services:
       - "9200:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: changeme
+      ES_JAVA_OPTS: "-Xmx9g -Xms9g"
+      ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD} 
     networks:
       - elk
 
@@ -37,7 +37,12 @@ services:
       - "9600:9600"
       - "12201:12201/udp"
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xmx3g -Xms3g"
+      ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
+      ELASTICSEARCH_PORT: $ELASTICSEARCH_PORT
+      ELASTICSEARCH_USERNAME: $ELASTICSEARCH_USERNAME
+      ELASTICSEARCH_PASSWORD: $ELASTICSEARCH_PASSWORD
+
     networks:
       - elk
     depends_on:
@@ -52,34 +57,47 @@ services:
       - type: bind
         source: ./kibana/config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
-        read_only: true
+        read_only: false
+    environment:
+      ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
+      ELASTICSEARCH_PORT: $ELASTICSEARCH_PORT
+      ELASTICSEARCH_USERNAME: $ELASTICSEARCH_USERNAME
+      ELASTICSEARCH_PASSWORD: $ELASTICSEARCH_PASSWORD
     ports:
       - "5601:5601"
+      - "80:5601"
     networks:
       - elk
     depends_on:
       - elasticsearch
 
   metricbeat:
-    image: docker.elastic.co/beats/metricbeat:7.3.2
-    command: -system.hostfs=/hostfs
+    user: root
+    build:
+      context: metricbeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    command: ["--strict.perms=false", "-system.hostfs=/hostfs"]
     volumes:
+      #- type: bind
+      #  source: ./metricbeat/config/metricbeat.yml
+       # target: /usr/share/metricbeat/metricbeat.yml
+       # read_only: false
       - /proc:/hostfs/proc:ro
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
       - /:/hostfs:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock      
     environment:
-      - "WAIT_FOR_HOSTS=localhost:9200 127.0.0.1:5601"
-      - "HOST_ELASTICSEARCH=127.0.0.1:9200"
-      - "HOST_KIBANA=127.0.0.1:5601"
-      - "setup.dashboards.enabled=true"
-      - "setup.kibana.host=127.0.0.1:5601"
-
-    extra_hosts:
-      - "elasticsearch:127.0.0.1" # The IP of docker0 interface to access host from container
-      - "kibana:127.0.0.1" # The IP of docker0 interface to access host from container
+      LS_JAVA_OPTS: "-Xmx3g -Xms3g"
+      ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
+      ELASTICSEARCH_PORT: $ELASTICSEARCH_PORT
+      ELASTICSEARCH_USERNAME: $ELASTICSEARCH_USERNAME
+      ELASTICSEARCH_PASSWORD: $ELASTICSEARCH_PASSWORD
+      KIBANA_HOST: $KIBANA_HOST
+      KIBANA_PORT: $KIBANA_PORT
     network_mode: host
-
+    depends_on:
+      - kibana 
 networks:
   elk:
     driver: bridge
