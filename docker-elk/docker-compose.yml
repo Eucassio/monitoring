@@ -18,9 +18,8 @@ services:
       ELASTICSEARCH1_IP: ${ELASTICSEARCH1_IP}
       ELASTICSEARCH2_IP: ${ELASTICSEARCH2_IP}
       NODE_NAME: $HOSTNAME  
-      
-    networks:
-      - elk
+    
+    network_mode: host      
 
   logstash:
     build:

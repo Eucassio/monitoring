@@ -5,7 +5,6 @@
 cluster.name: "docker-cluster"
 network.host: 0.0.0.0
 node.name: ${NODE_NAME}
-network.publish_host: ${ELASTICSEARCH1_IP}
 
 discovery.seed_hosts: ["${ELASTICSEARCH1_IP}","${ELASTICSEARCH2_IP}"]
 cluster.initial_master_nodes: ["${ELASTICSEARCH1_IP}","${ELASTICSEARCH2_IP}"]
