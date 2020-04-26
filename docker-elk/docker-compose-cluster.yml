@@ -15,9 +15,11 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xmx9g -Xms9g"
       ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD} 
-    networks:
-      - elk
+      ELASTICSEARCH1_IP: ${ELASTICSEARCH1_IP}
+      ELASTICSEARCH2_IP: ${ELASTICSEARCH2_IP}
+      NODE_NAME: $HOSTNAME
 
+    network_mode: host
 networks:
   elk:
     driver: bridge

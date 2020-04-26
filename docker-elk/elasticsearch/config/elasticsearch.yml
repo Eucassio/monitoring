@@ -4,11 +4,11 @@
 #
 cluster.name: "docker-cluster"
 network.host: 0.0.0.0
-node.name: elasticsearch2
-cluster.initial_master_nodes: elasticsearch1
-discovery.zen.ping.unicast.hosts: 10.20.4.98
+node.name: ${NODE_NAME} 
+discovery.seed_hosts: ["${ELASTICSEARCH1_IP}","${ELASTICSEARCH2_IP}"]
+cluster.initial_master_nodes: ["${ELASTICSEARCH1_IP}","${ELASTICSEARCH2_IP}"]
 http.cors.enabled: true
-http.cors.allow-origin: *
+http.cors.allow-origin: "*"
 
 ## Use single node discovery in order to disable production mode and avoid bootstrap checks
 ## see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
@@ -19,5 +19,5 @@ http.cors.allow-origin: *
 ## see https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-xpack.html
 #
 xpack.license.self_generated.type: basic
-xpack.security.enabled: true
+xpack.security.enabled: false
 xpack.monitoring.collection.enabled: true
