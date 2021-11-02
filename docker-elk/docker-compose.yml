@@ -9,11 +9,13 @@ services:
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - ./esdata1:/usr/share/elasticsearch/data:rw
+      - ./tls/elasticsearch/elasticsearch.p12:/usr/share/elasticsearch/config/elasticsearch.p12:ro
+      - ./tls/elasticsearch/http.p12:/usr/share/elasticsearch/config/http.p12:ro
     ports:
       - "9201:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx9g -Xms9g"
+      ES_JAVA_OPTS: "-Xmx2g -Xms2g"
       ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD}
       ELASTICSEARCH1_IP: ${ELASTICSEARCH1_IP}
       ELASTICSEARCH2_IP: ${ELASTICSEARCH2_IP}
@@ -21,36 +23,7 @@ services:
     
     network_mode: host      
 
-  logstash:
-    build:
-      context: logstash/
-      args:
-        ELK_VERSION: $ELK_VERSION
-    volumes:
-      - type: bind
-        source: ./logstash/config/logstash.yml
-        target: /usr/share/logstash/config/logstash.yml
-        read_only: true
-      - type: bind
-        source: ./logstash/pipeline
-        target: /usr/share/logstash/pipeline
-        read_only: true
-    ports:
-      - "5000:5000"
-      - "9600:9600"
-      - "12201:12201/udp"
-    environment:
-      LS_JAVA_OPTS: "-Xmx3g -Xms3g"
-      ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
-      ELASTICSEARCH_PORT: $ELASTICSEARCH_PORT
-      ELASTICSEARCH_USERNAME: $ELASTICSEARCH_USERNAME
-      ELASTICSEARCH_PASSWORD: $ELASTICSEARCH_PASSWORD
-
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
-
+  
   kibana:
     build:
       context: kibana/
@@ -61,6 +34,7 @@ services:
         source: ./kibana/config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
         read_only: false
+      - ./tls/kibana/elasticsearch-ca.pem:/usr/share/kibana/config/elasticsearch-ca.pem:ro
     environment:
       ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
       ELASTICSEARCH_PORT: $ELASTICSEARCH_PORT
@@ -91,7 +65,7 @@ services:
       - /:/hostfs:ro
       - /var/run/docker.sock:/var/run/docker.sock      
     environment:
-      LS_JAVA_OPTS: "-Xmx3g -Xms3g"
+      LS_JAVA_OPTS: "-Xmx515m -Xms512m"
       ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
       ELASTICSEARCH_PORT: $ELASTICSEARCH_PORT
       ELASTICSEARCH_USERNAME: $ELASTICSEARCH_USERNAME

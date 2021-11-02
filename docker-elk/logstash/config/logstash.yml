@@ -10,3 +10,12 @@ xpack.monitoring.elasticsearch.hosts: [ "http://${ELASTICSEARCH_HOST}:${ELASTICS
 xpack.monitoring.enabled: true
 xpack.monitoring.elasticsearch.username: ${ELASTICSEARCH_USERNAME}
 xpack.monitoring.elasticsearch.password: ${ELASTICSEARCH_PASSWORD}
+##
+## TLS configuration
+## See instructions from README to enable.
+##
+
+## Legacy monitoring data collection
+## see https://www.elastic.co/guide/en/logstash/current/monitoring-internal-collection-legacy.html
+#
+xpack.monitoring.elasticsearch.ssl.certificate_authority: config/elasticsearch-ca.pem
