@@ -10,7 +10,7 @@ services:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - ./esdata1:/usr/share/elasticsearch/data:rw
       - ./tls/elasticsearch/elasticsearch.p12:/usr/share/elasticsearch/config/elasticsearch.p12:ro
-      - ./tls/elasticsearch/http.p12:/usr/share/elasticsearch/config/http.p12:ro
+    #  - ./tls/elasticsearch/http.p12:/usr/share/elasticsearch/config/http.p12:ro
     ports:
       - "9201:9200"
       - "9300:9300"
@@ -19,7 +19,8 @@ services:
       ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD}
       ELASTICSEARCH1_IP: ${ELASTICSEARCH1_IP}
       ELASTICSEARCH2_IP: ${ELASTICSEARCH2_IP}
-      NODE_NAME: $HOSTNAME  
+      NODE_NAME: $HOSTNAME 
+      CERTIFICATE_PASSWORD: ${CERTIFICATE_PASSWORD}
     
     network_mode: host      
 
@@ -34,12 +35,14 @@ services:
         source: ./kibana/config/kibana.yml
         target: /usr/share/kibana/config/kibana.yml
         read_only: false
-      - ./tls/kibana/elasticsearch-ca.pem:/usr/share/kibana/config/elasticsearch-ca.pem:ro
+      - ./tls/elastic-stack-ca.p12:/usr/share/kibana/config/elastic-stack-ca.p12:ro
     environment:
       ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
       ELASTICSEARCH_PORT: $ELASTICSEARCH_PORT
       ELASTICSEARCH_USERNAME: $ELASTICSEARCH_USERNAME
       ELASTICSEARCH_PASSWORD: $ELASTICSEARCH_PASSWORD
+      CERTIFICATE_PASSWORD: ${CERTIFICATE_PASSWORD}
+
     ports:
       - "5601:5601"
       #- "80:5601"
